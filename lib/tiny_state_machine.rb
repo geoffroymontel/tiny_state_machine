@@ -37,6 +37,9 @@ module TinyStateMachine
     end
 
     # declare events
+    # you can use :any in the hash key for an event that can come from any state
+    # @example
+    #   sm.event :error, :any => :error
     #
     # @param event [String or Symbol] state name
     # @param hash [Hash] a Hash in the form : old_state => new_state
@@ -55,7 +58,7 @@ module TinyStateMachine
     # @raise [InvalidEvent] if the event is invalid (incorrect state)
     # @return the new state the machine is in
     def trigger(event)
-      e = @events.find { |e| e[:event] == event && e[:from] == @state }
+      e = @events.find { |e| e[:event] == event && (e[:from] == @state || e[:from] == :any) }
       raise InvalidEvent, "Invalid event '#{event}' from state '#{@state}'" if e.nil?
       old_state = @state
       @state = e[:to]

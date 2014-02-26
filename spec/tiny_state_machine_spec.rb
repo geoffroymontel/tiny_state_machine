@@ -55,6 +55,14 @@ module TinyStateMachine
         sm.trigger(:buy)
         expect(callback).to have_received(:change).with(:buy, :in_store, :new)
       end
+
+      it "should handle events from :any state" do
+        sm = TinyStateMachine::Machine.new :in_store do |sm|
+          sm.event :buy, :any => :new
+        end
+        sm.trigger(:buy)
+        expect(sm.state).to eql :new
+      end
     end
 
   end

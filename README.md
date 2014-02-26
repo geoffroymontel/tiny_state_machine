@@ -25,6 +25,7 @@ sm = TinyStateMachine::Machine.new :in_store do |sm|
   sm.event :use, :used => :used
   sm.event :break, :used => :broken
   sm.event :fix, :broken => :used
+  sm.event :earthquake, :any => :destroyed
   sm.on_state_change do |event, from_state, to_state|
     puts "new state = #{to_state}"
   end
@@ -47,6 +48,11 @@ sm.state
 sm.trigger(:use)
 # new state = used
 # => :used
+
+# some events can come from :any state
+sm.trigger(:earthquake)
+# new state = destroyed
+# => :destroyed
 ```
 
 ## Tests
